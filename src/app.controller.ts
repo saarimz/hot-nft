@@ -2,8 +2,8 @@ import {
   Controller,
   createParamDecorator,
   ExecutionContext,
-  Get,
-} from '@nestjs/common';
+  Get, HttpStatus
+} from "@nestjs/common";
 import axios from 'axios';
 
 const reservoirKey = 'e3db139a-f584-52a8-a9e0-28d7e003c392';
@@ -44,6 +44,7 @@ export class AppController {
      <!DOCTYPE html>
     <html>
       <head>
+        <title>🔥🔥🔥 HOT NFT 🔥🔥🔥</title>
         <meta property="fc:frame" content="vNext" />
         <meta property="fc:frame:image" content="${image}" />
         <meta property="fc:frame:button:1" content="${mintUrl}" />
@@ -59,7 +60,7 @@ export class AppController {
       </body>
     </html>`;
 
-    return res.send(data);
+    return res.status(HttpStatus.OK).send(data);
   }
 }
 
