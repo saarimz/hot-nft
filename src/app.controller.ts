@@ -45,13 +45,12 @@ export class AppController {
 
       const collectionData = collectionRes.collections[0];
 
-      console.log('mint', mint);
 
       const image = collectionData.image;
       const name = collectionData.name;
       const chainId = collectionData.chainId;
       const contractAddress = collectionData.id;
-      const owners = `${mint.owners} owners`;
+      const owners = `${mint.owners ?? mint.ownerCount} owners`;
       const mintUrl = `https://zora.co/collect/${chainId}:${contractAddress}`;
       const chainName = CHAIN_ID_TO_NAME[chainId] ?? chainId;
 
