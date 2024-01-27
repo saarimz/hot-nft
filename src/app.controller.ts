@@ -17,6 +17,15 @@ const HtmlResponse = createParamDecorator(
   },
 );
 
+const CHAIN_ID_TO_NAME = {
+  1: 'Ethereum',
+  10: "Optimism",
+  7777777: "Zora",
+  137: "Polygon",
+  42161: "Arbitrum",
+  8453: "Base"
+}
+
 @Controller()
 export class AppController {
   constructor(private readonly httpService: HttpService) {}
@@ -41,6 +50,10 @@ export class AppController {
       const chainId = collectionData.chainId;
       const contractAddress = collectionData.id;
       const mintUrl = `https://zora.co/collect/${chainId}:${contractAddress}`;
+      const chainName = CHAIN_ID_TO_NAME[chainId] ?? chainId;
+
+      const text = `${name} on ${chainName}`;
+      const shortContractAddress = `${contractAddress.slice(0, 5)}...`;
 
       const data = `
      <!DOCTYPE html>
@@ -49,12 +62,13 @@ export class AppController {
         <title>🔥🔥🔥 HOT NFT 🔥🔥🔥</title>
         <meta property="fc:frame" content="vNext" />
         <meta property="fc:frame:image" content="${image}" />
-        <meta property="fc:frame:button:1" content="${mintUrl}" />
+        <meta property="fc:frame:button:1" content="${text}" />
+        <meta property="fc:frame:button:2" content="${shortContractAddress}" />
       </head>
       <body className="flex flex-col align-center">
         <h1>🔥🔥🔥 HOT NFT 🔥🔥🔥</h1>
         <div>
-        
+          <p>Visit this frame on warpcast.com</p>
         </div>
         <h2>${name}</h2>
          <p><a href="${mintUrl}" target="_blank"><p>Mint</p></a>
