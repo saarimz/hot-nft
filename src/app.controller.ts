@@ -45,14 +45,16 @@ export class AppController {
 
       const collectionData = collectionRes.collections[0];
 
+      console.log('mint', mint);
+
       const image = collectionData.image;
       const name = collectionData.name;
       const chainId = collectionData.chainId;
       const contractAddress = collectionData.id;
+      const owners = `${mint.owners} owners`;
       const mintUrl = `https://zora.co/collect/${chainId}:${contractAddress}`;
       const chainName = CHAIN_ID_TO_NAME[chainId] ?? chainId;
 
-      const text = `${name} on ${chainName}`;
       const shortContractAddress = `${contractAddress.slice(0, 5)}...`;
 
       const data = `
@@ -62,8 +64,10 @@ export class AppController {
         <title>🔥🔥🔥 HOT NFT 🔥🔥🔥</title>
         <meta property="fc:frame" content="vNext" />
         <meta property="fc:frame:image" content="${image}" />
-        <meta property="fc:frame:button:1" content="${text}" />
-        <meta property="fc:frame:button:2" content="${shortContractAddress}" />
+        <meta property="fc:frame:button:1" content="${name}" />
+        <meta property="fc:frame:button:1" content="${chainName}" />
+        <meta property="fc:frame:button:3" content="${shortContractAddress}" />
+        <meta property="fc:frame:button:4" content="${owners}" />
       </head>
       <body className="flex flex-col align-center">
         <h1>🔥🔥🔥 HOT NFT 🔥🔥🔥</h1>
@@ -86,7 +90,7 @@ export class AppController {
 
 async function _getTrendingMints() {
   const url =
-    'https://api.reservoir.tools/collections/trending-mints/v1?limit=50&period=10m';
+    'https://api.reservoir.tools/collections/trending-mints/v1?limit=10&period=10m';
 
   const response = await axios.get(url, {
     headers: {
