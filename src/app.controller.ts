@@ -2,12 +2,13 @@ import {
   Controller,
   createParamDecorator,
   ExecutionContext,
-  Get, HttpStatus
-} from "@nestjs/common";
-import { HttpService } from "@nestjs/axios";
-import axios from "axios";
+  Get,
+  HttpStatus,
+} from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import axios from 'axios';
 
-const reservoirKey = 'e3db139a-f584-52a8-a9e0-28d7e003c392';
+const reservoirKey = process.env.RESERVOIR_API_KEY;
 
 const HtmlResponse = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
@@ -19,12 +20,12 @@ const HtmlResponse = createParamDecorator(
 
 const CHAIN_ID_TO_NAME = {
   1: 'Ethereum',
-  10: "Optimism",
-  7777777: "Zora",
-  137: "Polygon",
-  42161: "Arbitrum",
-  8453: "Base"
-}
+  10: 'Optimism',
+  7777777: 'Zora',
+  137: 'Polygon',
+  42161: 'Arbitrum',
+  8453: 'Base',
+};
 
 @Controller()
 export class AppController {
@@ -44,7 +45,6 @@ export class AppController {
       const collectionRes = await _getCollectionDetails(mint.id);
 
       const collectionData = collectionRes.collections[0];
-
 
       const image = collectionData.image;
       const name = collectionData.name;
@@ -82,7 +82,9 @@ export class AppController {
       return res.status(HttpStatus.OK).send(data);
     } catch (error: any) {
       console.error('Failed to fetch data:', error);
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send('<h1>Error fetching data</h1>');
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .send('<h1>Error fetching data</h1>');
     }
   }
 }
@@ -101,7 +103,7 @@ async function _getTrendingMints() {
   return response.data;
 }
 
-async function _getCollectionDetails(id: string)  {
+async function _getCollectionDetails(id: string) {
   const url = `https://api.reservoir.tools/collections/v7?id=${id}`;
 
   const response = await axios.get(url, {
@@ -110,7 +112,6 @@ async function _getCollectionDetails(id: string)  {
       'X-Api-Key': reservoirKey,
     },
   });
-
 
   return response.data;
 }
