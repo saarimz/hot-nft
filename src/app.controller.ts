@@ -4,7 +4,8 @@ import {
   ExecutionContext,
   Get, HttpStatus
 } from "@nestjs/common";
-import axios from 'axios';
+import { HttpService } from "@nestjs/axios";
+import axios from "axios";
 
 const reservoirKey = 'e3db139a-f584-52a8-a9e0-28d7e003c392';
 
@@ -18,7 +19,7 @@ const HtmlResponse = createParamDecorator(
 
 @Controller()
 export class AppController {
-  constructor() {}
+  constructor(private readonly httpService: HttpService) {}
 
   @Get()
   async getHtml(@HtmlResponse() res: any) {
@@ -78,15 +79,16 @@ async function _getTrendingMints() {
   return response.data;
 }
 
-async function _getCollectionDetails(id: string) {
+async function _getCollectionDetails(id: string)  {
   const url = `https://api.reservoir.tools/collections/v7?id=${id}`;
 
-  const response = await axios.get(url, {
+  const response = httpService.get(url, {
     headers: {
       'Content-Type': 'application/json',
       'X-Api-Key': reservoirKey,
     },
   });
+
 
   return response.data;
 }

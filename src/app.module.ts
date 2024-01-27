@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { HttpModule } from "@nestjs/axios";
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { join } from 'path';
       rootPath: join(__dirname, '..', 'client'),
       exclude: ['/api/(.*)'],
     }),
+    HttpModule
   ],
   controllers: [AppController],
 })
