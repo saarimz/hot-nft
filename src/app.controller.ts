@@ -23,25 +23,26 @@ export class AppController {
 
   @Get()
   async getHtml(@HtmlResponse() res: any) {
-    const mintsResponse = await _getTrendingMints();
+    try {
+      const mintsResponse = await _getTrendingMints();
 
-    const mints = mintsResponse.mints;
+      const mints = mintsResponse.mints;
 
-    const randomIndex = Math.floor(Math.random() * mints.length);
+      const randomIndex = Math.floor(Math.random() * mints.length);
 
-    const mint = mints[randomIndex];
+      const mint = mints[randomIndex];
 
-    const collectionRes = await _getCollectionDetails(mint.id);
+      const collectionRes = await _getCollectionDetails(mint.id);
 
-    const collectionData = collectionRes.collections[0];
+      const collectionData = collectionRes.collections[0];
 
-    const image = collectionData.image;
-    const name = collectionData.name;
-    const chainId = collectionData.chainId;
-    const contractAddress = collectionData.id;
-    const mintUrl = `https://zora.co/collect/${chainId}:${contractAddress}`;
+      const image = collectionData.image;
+      const name = collectionData.name;
+      const chainId = collectionData.chainId;
+      const contractAddress = collectionData.id;
+      const mintUrl = `https://zora.co/collect/${chainId}:${contractAddress}`;
 
-    const data = `
+      const data = `
      <!DOCTYPE html>
     <html>
       <head>
@@ -61,7 +62,11 @@ export class AppController {
       </body>
     </html>`;
 
-    return res.status(HttpStatus.OK).send(data);
+      return res.status(HttpStatus.OK).send(data);
+    } catch (error: any) {
+      console.error('Failed to fetch data:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send('<h1>Error fetching data</h1>');
+    }
   }
 }
 
@@ -82,7 +87,7 @@ async function _getTrendingMints() {
 async function _getCollectionDetails(id: string)  {
   const url = `https://api.reservoir.tools/collections/v7?id=${id}`;
 
-  const response = httpService.get(url, {
+  const response = await axios.get(url, {
     headers: {
       'Content-Type': 'application/json',
       'X-Api-Key': reservoirKey,
