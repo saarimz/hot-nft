@@ -65,7 +65,7 @@ export class AppController {
         <meta property="fc:frame" content="vNext" />
         <meta property="fc:frame:image" content="${image}" />
         <meta property="fc:frame:button:1" content="${name}" />
-        <meta property="fc:frame:button:1" content="${chainName}" />
+        <meta property="fc:frame:button:2" content="${chainName}" />
         <meta property="fc:frame:button:3" content="${shortContractAddress}" />
         <meta property="fc:frame:button:4" content="${owners}" />
       </head>
